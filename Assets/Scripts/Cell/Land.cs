@@ -10,8 +10,13 @@ public enum LANDLEVEL
     LV3,
 }
 
-public class LandScript : MonoBehaviour
+public class Land : Grid
 {
     public PLAYER owner;
     public LANDLEVEL landLevel;
+
+    void Start() 
+    {
+        cellType = CELLTYPE.EDGE;
+    }
 }

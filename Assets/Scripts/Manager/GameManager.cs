@@ -5,6 +5,8 @@ using System;
 
 public enum GAMESTAGE
 {
+    CREATEBOARD,
+    WAITINGFORSTART,
     START,
     ROLLING,
     MOVING,
@@ -36,12 +38,21 @@ public class GameManager : MonoBehaviour
         inst = this;        
     }
 
+    void Start() 
+    {
+        OnChangeGameStageStage(GAMESTAGE.WAITINGFORSTART);
+    }
+
     void OnChangeGameStageStage(GAMESTAGE stage)
     {
         currentGameStage = stage;
 
         switch(currentGameStage)
         {
+            case GAMESTAGE.CREATEBOARD:
+                break;
+            case GAMESTAGE.WAITINGFORSTART:
+                break;
             case GAMESTAGE.START:
                 break;
             case GAMESTAGE.ROLLING:
