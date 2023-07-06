@@ -5,23 +5,22 @@ using System;
 
 public enum GAMESTAGE
 {
-    CREATEBOARD,
+    // CREATEBOARD,
     WAITINGFORSTART,
     START,
     ROLLING,
     MOVING,
+    CALCULATEHITPOINT,
     BUYING,
     END,
 }
 
-[Flags]
-public enum PLAYER
+public enum TEAM
 {
-    NONE = 0,
-    RED = 1,
-    GREEN = 2,
-    BLUE = 4,
-    YELLOW = 8,
+    RED,
+    GREEN,
+    BLUE,
+    YELLOW,
 }
 
 public class GameManager : MonoBehaviour
@@ -29,9 +28,12 @@ public class GameManager : MonoBehaviour
     public static GameManager inst;
 
     public GAMESTAGE currentGameStage;
-    public PLAYER playerInGame;
+    public List<PlayerController> playerInGame = new List<PlayerController>();
 
-    public PLAYER playerTurn;
+    public TEAM playerTurn;
+    PlayerController currentPlayer;
+
+    int moveCount = 0;
 
     void Awake()
     {
@@ -49,15 +51,18 @@ public class GameManager : MonoBehaviour
 
         switch(currentGameStage)
         {
-            case GAMESTAGE.CREATEBOARD:
-                break;
+            // case GAMESTAGE.CREATEBOARD:
+            //     break;
             case GAMESTAGE.WAITINGFORSTART:
                 break;
             case GAMESTAGE.START:
+                OnChangeTurn();
                 break;
             case GAMESTAGE.ROLLING:
                 break;
             case GAMESTAGE.MOVING:
+                break;
+            case GAMESTAGE.CALCULATEHITPOINT:
                 break;
             case GAMESTAGE.BUYING:
                 break;
@@ -66,20 +71,60 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void OnFinishToss(int _diceNumeber)
+    {
+        moveCount = _diceNumeber;
+
+        OnChangeGameStageStage(GAMESTAGE.MOVING);
+    }
+
     void OnChangeTurn()
     {
         switch(playerTurn)
         {
-            case PLAYER.RED:
+            case TEAM.RED:
+                NextPlayerTurn();
                 break;
-            case PLAYER.GREEN:
+            case TEAM.GREEN:
+                NextPlayerTurn();
                 break;
-            case PLAYER.BLUE:
+            case TEAM.BLUE:
+                NextPlayerTurn();
                 break;
-            case PLAYER.YELLOW:
+            case TEAM.YELLOW:
+                NextPlayerTurn();
                 break;
         }
     }
 
+    TEAM NextPlayerTurn()
+    {
+        TEAM nextPlayer = TEAM.RED;
+
+        for(int i = 0; i < playerInGame.Count; i++)
+        {
+            if(playerInGame[i] == currentPlayer)
+            {
+                if(i == playerInGame.Count-1)
+                {
+                    nextPlayer = playerInGame[0].Team;
+                    currentPlayer = playerInGame[0];
+                }
+
+                nextPlayer = playerInGame[i+1].Team;
+                currentPlayer = playerInGame[i+1];
+            }
+        }
+
+        return nextPlayer;
+    }
+
+    void IsPlayerGameOver()
+    {
+        if(currentPlayer.HitPoint >= 0)
+        {
+            //TODO: Game Over
+        }
+    }
     
 }
