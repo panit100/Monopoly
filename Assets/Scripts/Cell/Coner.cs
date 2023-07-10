@@ -11,8 +11,12 @@ public class Coner : Grid
         cellType = CELLTYPE.CONER;
    }
 
-   public void HealPlayer()
+   public void HealPlayer(PlayerController player)
    {
+      if(player.Team == team)
+         player.Heal(3);
+      else
+         player.Heal(1);
 
    }
 }

@@ -36,7 +36,18 @@ public class Grid : MonoBehaviour
     {
         for(int player = 0; player < playerOnGrid.Count; player++)
         {
-            playerOnGrid[player].positionOnGrid = positionOnGrids[0];
+            playerOnGrid[player].positionOnGrid = positionOnGrids[player];
+            playerOnGrid[player].UpdatePosition();
         }
+    }
+
+    public Grid GetNextCell()
+    {
+        return NextCell;
+    }
+
+    public List<Transform> GetPositionOnGrids()
+    {
+        return positionOnGrids;
     }
 }

@@ -1,18 +1,31 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Dice : MonoBehaviour
 {
+    [SerializeField] Button tossButton;
     public int diceFace = 6;
-
     public int diceNumber = 0;
 
     Animator animator;
 
-    void Start() 
+    void Awake() 
     {
         animator = GetComponent<Animator>();
+
+        AddListenerButton();
+    }
+
+    void AddListenerButton()
+    {
+        tossButton.onClick.AddListener(OnToss);
+    }
+
+    void RemoveListenerButton()
+    {
+        tossButton.onClick.RemoveAllListeners();
     }
 
     public void OnToss()
@@ -35,5 +48,15 @@ public class Dice : MonoBehaviour
         animator.SetBool($"Face {diceNumber}",false);
 
         GameManager.inst.OnFinishToss(diceNumber);
+    }
+
+    void OnDestroy() 
+    {
+        RemoveListenerButton();
+    }
+
+    public void EnableButton(bool enable)
+    {
+        tossButton.gameObject.SetActive(enable);
     }
 }
